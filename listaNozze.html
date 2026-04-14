@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista Nozze</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@200;300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Playfair+Display:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        --text-dark: #3e3e3e;
+        --accent: #a48641;
+        --gold-glow: rgba(164, 134, 65, 0.3);
+        --glass-bg: rgba(255, 255, 255, 0.6);
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg-gradient);
+        color: var(--text-dark);
+        font-family: "Montserrat", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        overflow-x: hidden;
+      }
+
+      /* --- ANIMAZIONI --- */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes floating {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      @keyframes floatCorner {
+        0% {
+          transform: translate(-2px, -2px) rotate(0deg);
+        }
+        100% {
+          transform: translate(5px, 5px) rotate(1deg);
+        }
+      }
+
+      /* Classi per il ritardo della comparsa sequenziale */
+      .delay-1 {
+        animation: fadeInUp 0.8s ease-out 0.3s both;
+      }
+      .delay-2 {
+        animation: fadeInUp 0.8s ease-out 0.6s both;
+      }
+      .delay-3 {
+        animation: fadeInUp 0.8s ease-out 0.9s both;
+      }
+      .delay-4 {
+        animation: fadeInUp 0.8s ease-out 1.2s both;
+      }
+      .delay-5 {
+        animation: fadeInUp 0.8s ease-out 1.5s both;
+      }
+      .delay-6 {
+        animation: fadeInUp 0.8s ease-out 1.8s both;
+      }
+      .delay-7 {
+        animation: fadeInUp 0.8s ease-out 2.1s both;
+      }
+
+      /* --- CONTENITORE PRINCIPALE --- */
+      .envelope {
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.4)),
+          url("sfondo.png") no-repeat center;
+        background-size: cover;
+        max-width: 600px;
+        width: 100%;
+        border-radius: 60px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        padding: 60px 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        /* L'envelope appare per prima */
+        animation: fadeInUp 1.2s ease-out forwards;
+      }
+
+      /* FIORI */
+      .floral-top-left {
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        width: 250px;
+        height: 250px;
+        background: url("fiori_sinistra.png") no-repeat;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate;
+      }
+      .floral-bottom-right {
+        position: absolute;
+        bottom: -2px;
+        right: -2px;
+        width: 250px;
+        height: 250px;
+        background: url("fiori_destra.png") no-repeat bottom right;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate-reverse;
+      }
+      .floral-top-right {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 200px;
+        height: 200px;
+        background: url("cornice_destra.png") no-repeat top right;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate;
+      }
+      .floral-bottom-left {
+        position: absolute;
+        bottom: -2px;
+        left: -2px;
+        width: 200px;
+        height: 200px;
+        background: url("cornice_sinistra.png") no-repeat bottom left;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate-reverse;
+      }
+
+      .title {
+        font-family: "Great Vibes", cursive;
+        font-size: 2.9rem;
+        color: var(--accent);
+        opacity: 0.8;
+        position: relative;
+        z-index: 10;
+      }
+
+      .title::after {
+        content: "✧";
+        display: block;
+        font-size: 1rem;
+        color: var(--accent);
+        margin-top: 5px;
+        font-size: 1.5rem;
+        color: var(--accent);
+        opacity: 0.6;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 21;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .intro-text {
+        color: #888;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+        z-index: 10;
+        width: 70%;
+      }
+
+      /* --- BOX IBAN --- */
+      .iban-container {
+        background: var(--glass-bg);
+        border: 1px solid rgba(164, 134, 65, 0.2);
+        padding: 25px;
+        border-radius: 25px;
+        width: 90%;
+        max-width: 420px;
+        margin-bottom: 30px;
+        z-index: 10;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .iban-container:hover {
+        box-shadow: 0 10px 20px var(--gold-glow);
+        border-color: var(--accent);
+      }
+
+      .iban-label {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--accent);
+        margin-bottom: 12px;
+      }
+
+      .iban-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .iban-code {
+        font-weight: 500;
+        font-size: 0.95rem;
+        word-break: break-all;
+      }
+
+      .copy-icon {
+        fill: var(--accent);
+        width: 18px;
+        height: 18px;
+        opacity: 0.7;
+      }
+
+      #copy-toast {
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        color: var(--accent);
+        font-weight: 600;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .show-toast #copy-toast {
+        opacity: 1;
+      }
+
+      /* --- SEZIONE CAUSALI --- */
+      .causali-section {
+        width: 100%;
+        max-width: 500px;
+        z-index: 10;
+      }
+
+      .causali-title {
+        font-family: "Great Vibes", cursive;
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+        color: var(--text-dark);
+      }
+
+      .causali-grid {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .causale-box {
+        background: var(--glass-bg);
+        border: 1px solid rgba(164, 134, 65, 0.15);
+        width: 135px;
+        height: 140px;
+        border-radius: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        text-align: center;
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* L'animazione floating rimane, ma fadeInUp la fa apparire */
+      }
+
+      .causale-box:hover {
+        border-color: var(--accent);
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 15px 30px var(--gold-glow);
+        transform: scale(1.08) translateY(-5px);
+        z-index: 30;
+      }
+
+      .causale-img {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+        margin-bottom: 12px;
+        transition: transform 0.3s ease;
+      }
+
+      .causale-box:hover .causale-img {
+        transform: scale(1.1) rotate(-5deg);
+      }
+
+      .causale-tag {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        line-height: 1.2;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .foot {
+        font-family: "Great Vibes", cursive;
+        margin-top: 20px;
+        font-family: "Great Vibes", cursive;
+        font-size: 1.8rem;
+        color: var(--accent);
+        opacity: 0.8;
+      }
+
+      .foot::before {
+        content: "✧";
+        display: block;
+        font-size: 1rem;
+        color: var(--accent);
+        font-size: 1.5rem;
+        color: var(--accent);
+        opacity: 0.6;
+        position: relative;
+        z-index: 21;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      @media (max-width: 480px) {
+        .envelope {
+          padding: 50px 20px;
+          border-radius: 30px;
+        }
+        .causale-box {
+          width: 115px;
+          height: 115px;
+        }
+        .causale-tag {
+          font-size: 0.65rem;
+        }
+        .causale-img {
+          width: 40px;
+          height: 40px;
+        }
+        .title {
+          font-size: 2.5rem;
+        }
+        .intro-text {
+          width: 70%;
+        }
+        .foot {
+          font-size: 1.5rem;
+        }
+        .floral-top-left,
+        .floral-bottom-right {
+          width: 180px;
+          height: 180px;
+        }
+        .floral-bottom-left,
+        .floral-top-right {
+          width: 150px;
+          height: 150px;
+        }
+        .iban-code {
+          font-size: 0.7rem;
+        }
+      }
+
+      .bottom-nav {
+        position: fixed;
+        bottom: 20px;
+        transform: translateX(-50%);
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        display: flex;
+        gap: 15px;
+        padding: 12px 25px;
+        border-radius: 50px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(164, 134, 65, 0.2);
+        z-index: 1000;
+      }
+
+      .nav-item {
+        text-decoration: none;
+        color: #888;
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        color: var(--accent);
+      }
+
+      /* Nasconde il menu su schermi molto piccoli o fa aggiustamenti */
+      @media (max-width: 480px) {
+        .bottom-nav {
+          width: 90%;
+          justify-content: space-between;
+          padding: 12px 15px;
+          gap: 5px;
+        }
+        .nav-item {
+          font-size: 0.55rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="bgMusic" src="background.mpeg" loop autoplay></audio>
+
+    <div class="envelope">
+      <div class="floral-top-left" style="z-index: 0"></div>
+      <div class="floral-bottom-right" style="z-index: 0"></div>
+      <div class="floral-top-right" style="z-index: 0"></div>
+      <div class="floral-bottom-left" style="z-index: 0"></div>
+
+      <div class="title delay-1">Lista nozze</div>
+
+      <p class="intro-text delay-2">
+        La vostra presenza è il regalo più bello. <br />
+        Se desiderate contribuire ai nostri progetti
+      </p>
+
+      <div class="iban-container delay-3" id="iban-box" onclick="copyIban()">
+        <div class="iban-label">Tocca per copiare l'IBAN</div>
+        <div class="iban-wrapper">
+          <div class="iban-code" id="iban-text">
+             ITXXXXXXXXXXXXXXXXXXXXXXXXX
+          </div>
+          <svg class="copy-icon" viewBox="0 0 24 24">
+            <path
+              d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+            />
+          </svg>
+        </div>
+        <div style="font-size: 0.7rem; margin-top: 10px; color: #999">
+          Intestato a Sposa e Sposo
+        </div>
+        <div id="copy-toast">IBAN Copiato!</div>
+      </div>
+
+      <div class="causali-section">
+        <div class="causali-title delay-4">Idee per la causale:</div>
+
+        <div class="causali-grid">
+          <div
+            class="causale-box delay-5"
+            style="
+              animation:
+                fadeInUp 0.8s ease-out 1.5s both,
+                floating 4s ease-in-out infinite 2.3s;
+            "
+          >
+            <img src="aereo.png" class="causale-img" alt="Viaggio" />
+            <span class="causale-tag">Luna di Miele</span>
+          </div>
+
+          <div
+            class="causale-box delay-6"
+            style="
+              animation:
+                fadeInUp 0.8s ease-out 1.8s both,
+                floating 4s ease-in-out infinite 2.6s;
+            "
+          >
+            <img src="casa.png" class="causale-img" alt="Casa" />
+            <span class="causale-tag">Nido d'Amore</span>
+          </div>
+
+          <div
+            class="causale-box delay-7"
+            style="
+              animation:
+                fadeInUp 0.8s ease-out 2.1s both,
+                floating 4s ease-in-out infinite 2.9s;
+            "
+          >
+            <img src="cuore.png" class="causale-img" alt="Regalo" />
+            <span class="causale-tag">Fondo Felicità</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot delay-7" style="animation-delay: 2.5s">
+        Grazie di cuore!
+      </div>
+    </div>
+
+    <script>
+      function copyIban() {
+        const ibanText = document.getElementById("iban-text").innerText;
+        const container = document.getElementById("iban-box");
+        navigator.clipboard.writeText(ibanText).then(() => {
+          container.classList.add("show-toast");
+          setTimeout(() => {
+            container.classList.remove("show-toast");
+          }, 2000);
+        });
+      }
+    </script>
+
+    <nav class="bottom-nav delay-5">
+      <a href="busta.html" class="nav-item">Home</a>
+      <a href="schedule.html" class="nav-item">Programma</a>
+      <a href="listaNozze.html" class="nav-item active">Lista Nozze</a>
+      <a href="info.html" class="nav-item">Dress Code</a>
+    </nav>
+
+    <script>
+      const bgMusic = document.getElementById("bgMusic");
+      const FADE_DURATION = 100;
+
+      window.addEventListener("load", () => {
+        const savedTime = localStorage.getItem("musicTime");
+        if (savedTime) {
+          bgMusic.currentTime = parseFloat(savedTime);
+        }
+
+        // Start at volume 0 for the fade-in effect
+        bgMusic.volume = 0;
+
+        bgMusic
+          .play()
+          .then(() => {
+            fadeAudio(bgMusic, 1, FADE_DURATION); // Fade from 0 to 1
+          })
+          .catch(() => {
+            localStorage.setItem("musicTime", 0);
+            console.log(
+              "Autoplay blocked: User needs to click something first!",
+            );
+          });
+      });
+
+      document.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          // Only intercept internal links (don't break external ones)
+          if (link.hostname === window.location.hostname) {
+            e.preventDefault(); // Stop the page from changing immediately
+            const targetUrl = link.href;
+
+            fadeAudio(bgMusic, 0, FADE_DURATION, () => {
+              // Once volume is 0, save the time and navigate
+              localStorage.setItem("musicTime", bgMusic.currentTime);
+              window.location.href = targetUrl;
+            });
+          }
+        });
+      });
+
+      function fadeAudio(player, targetVolume, duration, callback) {
+        const startVolume = player.volume;
+        const startTime = performance.now();
+
+        function animateVolume(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+
+          // Linear interpolation between start and target volume
+          player.volume =  Math.max(0, Math.min(1, startVolume + (targetVolume - startVolume) * progress));
+
+          if (progress < 1) {
+            requestAnimationFrame(animateVolume);
+          } else if (callback) {
+            callback();
+          }
+        }
+        requestAnimationFrame(animateVolume);
+      }
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          // The user exited the app or switched tabs
+          // We pause it so it doesn't run in the background
+          bgMusic.pause();
+          // Save the time immediately so we don't lose progress
+          sessionStorage.setItem("musicTime", bgMusic.currentTime);
+        } else {
+          // The user came back to the browser
+          const savedTime = sessionStorage.getItem("musicTime");
+          if (savedTime) {
+            bgMusic.currentTime = parseFloat(savedTime);
+          }
+          bgMusic
+            .play()
+            .catch(() => console.log("User interaction required to resume"));
+        }
+      });
+
+      // 2. Continually save the current time
+      bgMusic.ontimeupdate = () => {
+        localStorage.setItem("musicTime", bgMusic.currentTime);
+      };
+
+      document.body.addEventListener(
+        "click",
+        () => {
+          if (bgMusic.paused) {
+            bgMusic
+              .play()
+              .catch((error) => console.log("Audio play failed:", error));
+              fadeAudio(bgMusic, 1, FADE_DURATION);
+          }
+        },
+        { once: true },
+      );
+    </script>
+  </body>
+</html>

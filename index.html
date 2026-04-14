@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Busta Elegante Interattiva - Immagini Personalizzate</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap");
+
+      :root {
+        /* === VARIABILI MOBILE (Fino a 480px) === */
+        --envelope-w: 300px;
+        --envelope-h: 450px; /* Mantengo le proporzioni verticali eleganti */
+        --envelope-shadow: rgb(136, 136, 136);
+
+        --letter-w: 280px;
+        --letter-h: 410px;
+        --letter-extract: -200px; /* Distanza di estrazione per mobile */
+
+        --flap-bottom: 115px;
+        --seal-bottom: 90px;
+        --seal-size: 85px;
+
+        --zoom-scale: 1.5; /* Zoom più controllato per schermi piccoli */
+        --zoom-y: 250px;
+      }
+
+      @media (min-width: 481px) {
+        :root {
+          /* === VARIABILI DESKTOP E TABLET === */
+          --envelope-w: 400px;
+          --envelope-h: 600px;
+
+          --letter-w: 380px;
+          --letter-h: 540px;
+          --letter-extract: -280px;
+
+          --flap-bottom: 155px;
+          --seal-bottom: 120px;
+          --seal-size: 110px;
+
+          --zoom-scale: 2.5;
+          --zoom-y: 450px;
+        }
+      }
+
+      html {
+        font-size: 20px;
+      }
+
+      body {
+        background-color: white;
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .cssletter {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        margin: 0;
+      }
+
+      .envelope {
+        position: relative;
+        width: var(--envelope-w);
+        height: var(--envelope-h);
+        background: rgb(252, 252, 248);
+        box-shadow:
+          inset 0 0 30px -5px var(--envelope-shadow),
+          0 0 50vw 0 #757575;
+        cursor: pointer;
+      }
+
+      .envelope-flap {
+        width: 100%;
+        height: 70%;
+        position: absolute;
+        top: 0;
+        z-index: 3;
+        overflow: hidden;
+        transition: 0.6s linear all;
+        transform-origin: top;
+        pointer-events: all;
+      }
+
+      .envelope-folds {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      .envelope-flap::before,
+      .envelope-left::before,
+      .envelope-right::before,
+      .envelope-bottom::before {
+        content: "";
+        transform: rotate(45deg);
+        background: rgb(252, 252, 248) url("sfondo.png") center/cover;
+        box-shadow: 0 0 30px -5px var(--envelope-shadow);
+        width: 100%;
+        aspect-ratio: 1;
+        display: block;
+        position: absolute;
+        top: 60%;
+      }
+
+      .envelope-flap::before {
+        border-radius: 5rem;
+        bottom: var(--flap-bottom);
+        top: auto;
+        width: 110%;
+        left: -5%; /* Usa una percentuale per adattarsi automaticamente */
+      }
+
+      .envelope-left::before {
+        top: 17%;
+        left: -65%;
+      }
+
+      .envelope-right::before {
+        top: 17%;
+        right: -65%;
+      }
+
+      .envelope-bottom::before {
+        top: 53%;
+        border-radius: 5rem;
+      }
+
+      .letter {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+        width: var(--letter-w);
+        height: var(--letter-h);
+        background: url("letter.png") center/cover;
+        z-index: 1;
+        border-radius: 4px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        padding: 20px;
+        box-sizing: border-box;
+        transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .seal {
+        position: absolute;
+        bottom: var(--seal-bottom);
+        left: 50%;
+        transform: translate(-50%, 50%);
+        width: var(--seal-size);
+        height: var(--seal-size);
+        z-index: 11;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .seal-image {
+        width: 150%;
+        height: 150%;
+        object-fit: contain;
+        filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
+      }
+
+      /* === CLASSI ANIMAZIONE === */
+      .envelope.open .envelope-flap {
+        transform: rotateX(180deg);
+        z-index: 2;
+      }
+
+      .envelope.extract-letter .letter {
+        transform: translateY(var(--letter-extract));
+      }
+
+      .envelope.zoom-fade {
+        transition: all 1.2s ease-in-out;
+        transform: scale(var(--zoom-scale)) translateY(var(--zoom-y));
+        opacity: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <audio id="bgMusic" src="background.mpeg" loop autoplay></audio>
+    <audio id="chestMusic" src="zelda_chest.mp3"></audio>
+
+    <section class="cssletter">
+      <div class="envelope" id="envelope">
+        <div class="letter" id="letter"></div>
+
+        <div class="envelope-flap" id="envelope-flap">
+          <div class="seal" id="seal">
+            <img src="sigillo.png" alt="Sigillo" class="seal-image" />
+          </div>
+        </div>
+        <div class="envelope-folds">
+          <div class="envelope-left"></div>
+          <div class="envelope-right"></div>
+          <div class="envelope-bottom"></div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const envelope = document.getElementById("envelope");
+      const letter = document.getElementById("letter");
+      const envelopeFlap = document.getElementById("envelope-flap");
+
+      const chestMusic = document.getElementById("chestMusic");
+
+      const bgMusic = document.getElementById("bgMusic");
+      const FADE_DURATION = 100;
+
+      window.addEventListener("load", () => {
+        const savedTime = localStorage.getItem("musicTime");
+        if (savedTime) {
+          bgMusic.currentTime = parseFloat(savedTime);
+        }
+
+        // Start at volume 0 for the fade-in effect
+        bgMusic.volume = 0;
+
+        bgMusic
+          .play()
+          .then(() => {
+            fadeAudio(bgMusic, 1, FADE_DURATION); // Fade from 0 to 1
+          })
+          .catch(() => {
+            localStorage.setItem("musicTime", 0);
+            console.log(
+              "Autoplay blocked: User needs to click something first!",
+            );
+          });
+      });
+
+      document.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          // Only intercept internal links (don't break external ones)
+          if (link.hostname === window.location.hostname) {
+            e.preventDefault(); // Stop the page from changing immediately
+            const targetUrl = link.href;
+
+            fadeAudio(bgMusic, 0, FADE_DURATION, () => {
+              // Once volume is 0, save the time and navigate
+              localStorage.setItem("musicTime", bgMusic.currentTime);
+              window.location.href = targetUrl;
+            });
+          }
+        });
+      });
+
+      function fadeAudio(player, targetVolume, duration, callback) {
+        const startVolume = player.volume;
+        const startTime = performance.now();
+
+        function animateVolume(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+
+          // Linear interpolation between start and target volume
+          player.volume =  Math.max(0, Math.min(1, startVolume + (targetVolume - startVolume) * progress));
+
+          if (progress < 1) {
+            requestAnimationFrame(animateVolume);
+          } else if (callback) {
+            callback();
+          }
+        }
+        requestAnimationFrame(animateVolume);
+      }
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          // The user exited the app or switched tabs
+          // We pause it so it doesn't run in the background
+          bgMusic.pause();
+          // Save the time immediately so we don't lose progress
+          sessionStorage.setItem("musicTime", bgMusic.currentTime);
+        } else {
+          // The user came back to the browser
+          const savedTime = sessionStorage.getItem("musicTime");
+          if (savedTime) {
+            bgMusic.currentTime = parseFloat(savedTime);
+          }
+          bgMusic
+            .play()
+            .catch(() => console.log("User interaction required to resume"));
+        }
+      });
+
+      // 2. Continually save the current time
+      bgMusic.ontimeupdate = () => {
+        localStorage.setItem("musicTime", bgMusic.currentTime);
+      };
+
+      document.body.addEventListener(
+        "click",
+        () => {
+          if (bgMusic.paused) {
+            bgMusic
+              .play()
+              .catch((error) => console.log("Audio play failed:", error));
+              fadeAudio(bgMusic, 1, FADE_DURATION);
+          }
+        },
+        { once: true },
+      );
+
+      window.addEventListener("pageshow", () => {
+        const envelope = document.getElementById("envelope");
+        const letter = document.getElementById("letter");
+        const envelopeFlap = document.getElementById("envelope-flap");
+
+        envelope.classList.remove("open", "extract-letter", "zoom-fade");
+        letter.style.opacity = 0;
+        envelopeFlap.style.zIndex = "3";
+      });
+
+      envelope.addEventListener("click", () => {
+        if (envelope.classList.contains("open")) return;
+
+        //chestMusic.play();
+
+        letter.style.opacity = 1;
+        envelope.classList.add("open");
+
+        setTimeout(() => {
+          envelopeFlap.style.zIndex = "0";
+        }, 400);
+
+        setTimeout(() => {
+          envelope.classList.add("extract-letter");
+        }, 800);
+
+        setTimeout(() => {
+          envelope.classList.add("zoom-fade");
+
+          setTimeout(() => {
+            window.location.href = "busta.html";
+          }, 1100);
+        }, 1200);
+      });
+    </script>
+  </body>
+</html>

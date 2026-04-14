@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dress Code</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@200;300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Playfair+Display:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        --text-dark: #3e3e3e;
+        --accent: #a48641;
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        --gold-glow: rgba(164, 134, 65, 0.3);
+        /* Palette colori richiesta */
+        --celeste: #a2d2ff;
+        --lilla: #d8bfd8;
+        --beige: #e5d3b3;
+        --bianco: #ffffff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg-gradient);
+        color: var(--text-dark);
+        font-family: "Montserrat", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        overflow-x: hidden;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes floatCorner {
+        0% {
+          transform: translate(-2px, -2px) rotate(0deg);
+        }
+        100% {
+          transform: translate(5px, 5px) rotate(1deg);
+        }
+      }
+
+      @keyframes pulseColor {
+        0%,
+        100% {
+          transform: scale(1);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        50% {
+          transform: scale(1.08);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+      }
+
+      .envelope {
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.4)),
+          url("sfondo.png") no-repeat center;
+        background-size: cover;
+        max-width: 600px;
+        width: 100%;
+        border-radius: 60px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        padding: 60px 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        /* L'envelope appare per prima */
+        animation: fadeInUp 1.2s ease-out forwards;
+      }
+
+      /* FIORI */
+      .floral-top-left {
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        width: 250px;
+        height: 250px;
+        background: url("fiori_sinistra.png") no-repeat;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate;
+      }
+      .floral-bottom-right {
+        position: absolute;
+        bottom: -2px;
+        right: -2px;
+        width: 250px;
+        height: 250px;
+        background: url("fiori_destra.png") no-repeat bottom right;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate-reverse;
+      }
+      .floral-top-right {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 200px;
+        height: 200px;
+        background: url("cornice_destra.png") no-repeat top right;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate;
+      }
+      .floral-bottom-left {
+        position: absolute;
+        bottom: -2px;
+        left: -2px;
+        width: 200px;
+        height: 200px;
+        background: url("cornice_sinistra.png") no-repeat bottom left;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate-reverse;
+      }
+
+      .floral-icon {
+        font-size: 1.5rem;
+        color: var(--accent);
+        opacity: 0.6;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 21;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      .title {
+        font-family: "Great Vibes", cursive;
+        font-size: 3rem;
+        color: var(--accent);
+        opacity: 0.8;
+        z-index: 10;
+      }
+
+      .title::after {
+        content: "✧";
+        display: block;
+        font-size: 1rem;
+        color: var(--accent);
+        margin-top: 5px;
+        font-size: 1.5rem;
+        color: var(--accent);
+        opacity: 0.6;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 21;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .description {
+        color: #888;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+        z-index: 10;
+        width: 70%;
+      }
+
+      /* SEZIONE COLORI */
+      .palette-container {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 25px;
+        z-index: 10;
+      }
+
+      .color-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        animation: fadeInUp 0.8s ease-out forwards;
+        opacity: 0;
+      }
+
+      .swatch {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 1px solid rgba(164, 134, 65, 0.2);
+        animation: pulseColor 4s ease-in-out infinite;
+        object-fit: cover; /* Assicura che le foto non si deformino */
+        background-color: #f0f0f0; /* Sfondo di fallback prima che l'immagine carichi */
+      }
+
+      .swatch:hover {
+        box-shadow: 0 10px 20px var(--gold-glow);
+        border-color: var(--accent);
+      }
+
+      .swatch-label {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+      }
+      .note-bianco {
+        font-size: 0.7rem;
+        font-style: italic;
+        color: var(--accent);
+        margin-top: 5px;
+      }
+
+      .foot {
+        font-family: "Great Vibes", cursive;
+        margin-top: 20px;
+        font-family: "Great Vibes", cursive;
+        font-size: 1.8rem;
+        color: var(--accent);
+        opacity: 0.8;
+      }
+
+      .foot::before {
+        content: "✧";
+        display: block;
+        font-size: 1rem;
+        color: var(--accent);
+        font-size: 1.5rem;
+        color: var(--accent);
+        opacity: 0.6;
+        position: relative;
+        z-index: 21;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      /* Delays */
+      .delay-1 {
+        animation: fadeInUp 0.8s ease-out 0.3s both;
+      }
+      .delay-2 {
+        animation: fadeInUp 0.8s ease-out 0.6s both;
+      }
+      .delay-3 {
+        animation: fadeInUp 0.8s ease-out 0.9s both;
+      }
+      .delay-4 {
+        animation: fadeInUp 0.8s ease-out 1.2s both;
+      }
+      .delay-5 {
+        animation: fadeInUp 0.8s ease-out 1.5s both;
+      }
+      .delay-6 {
+        animation: fadeInUp 0.8s ease-out 1.8s both;
+      }
+      .delay-7 {
+        animation: fadeInUp 0.8s ease-out 2.1s both;
+      }
+
+      /* Nasconde il menu su schermi molto piccoli o fa aggiustamenti */
+      @media (max-width: 480px) {
+        .bottom-nav {
+          width: 90%;
+          justify-content: space-between;
+          padding: 12px 15px;
+          gap: 5px;
+        }
+        .nav-item {
+          font-size: 0.55rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .envelope {
+          padding: 50px 20px;
+          border-radius: 30px;
+        }
+        .title {
+          font-size: 2.5rem;
+        }
+        .foot {
+          font-size: 1.2rem;
+        }
+        .time {
+          font-size: 1.2rem;
+        }
+        .label {
+          font-size: 1.6rem;
+        }
+        .icon-box {
+          width: 35px;
+          height: 35px;
+        }
+        .floral-top-left,
+        .floral-bottom-right {
+          width: 180px;
+          height: 180px;
+        }
+        .floral-bottom-left,
+        .floral-top-right {
+          width: 150px;
+          height: 150px;
+        }
+      }
+
+      .bottom-nav {
+        position: fixed;
+        bottom: 20px;
+        transform: translateX(-50%);
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        display: flex;
+        gap: 15px;
+        padding: 12px 25px;
+        border-radius: 50px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(164, 134, 65, 0.2);
+        z-index: 1000;
+      }
+
+      .nav-item {
+        text-decoration: none;
+        color: #888;
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        color: var(--accent);
+      }
+
+      /* Nasconde il menu su schermi molto piccoli o fa aggiustamenti */
+      @media (max-width: 480px) {
+        .bottom-nav {
+          width: 90%;
+          justify-content: space-between;
+          padding: 12px 15px;
+          gap: 5px;
+        }
+        .nav-item {
+          font-size: 0.55rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="envelope">
+      <div class="floral-top-left"></div>
+      <div class="floral-bottom-right"></div>
+      <div class="floral-top-right"></div>
+      <div class="floral-bottom-left"></div>
+
+      <div class="title delay-1">Dress Code</div>
+
+      <p class="description delay-2">
+        Celebriamo l'amore con i piedi nella sabbia. Vi invitiamo a scegliere un
+        outfit fresco ed elegante, ispirato alla nostra palette colori
+      </p>
+
+      <div class="palette-container">
+        <div class="color-item delay-3">
+          <img src="celeste.png" alt="Celeste" class="swatch" />
+          <span class="swatch-label">Celeste</span>
+        </div>
+        <div class="color-item delay-4">
+          <img src="fioreLilla.png" alt="Lilla" class="swatch" />
+          <span class="swatch-label">Lilla</span>
+        </div>
+        <div class="color-item delay-5">
+          <img src="fioreBeige.png" alt="Beige" class="swatch" />
+          <span class="swatch-label">Beige</span>
+        </div>
+      </div>
+
+      <div class="color-item delay-6">
+        <img src="fioreBianco.png" alt="Bianco" class="swatch" />
+        <span class="swatch-label">Bianco</span>
+        <span class="note-bianco">Se necessario per camicie</span>
+      </div>
+
+      <div class="foot delay-7">Sposa & Sposo</div>
+    </div>
+
+    <nav class="bottom-nav delay-5">
+      <a href="busta.html" class="nav-item">Home</a>
+      <a href="schedule.html" class="nav-item">Programma</a>
+      <a href="listaNozze.html" class="nav-item">Lista Nozze</a>
+      <a href="info.html" class="nav-item active">Dress Code</a>
+    </nav>
+  </body>
+</html>

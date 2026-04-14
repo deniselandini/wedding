@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Programma</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@200;300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Playfair+Display:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        --text-dark: #3e3e3e;
+        --accent: #a48641;
+        --gold-patina: #d4af37;
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg-gradient);
+        color: var(--text-dark);
+        font-family: "Montserrat", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        overflow-x: hidden;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes floatCorner {
+        0% {
+          transform: translate(-2px, -2px) rotate(0deg);
+        }
+        100% {
+          transform: translate(5px, 5px) rotate(1deg);
+        }
+      }
+
+      .envelope {
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.4)),
+          url("sfondo.png") no-repeat center;
+        background-size: cover;
+        max-width: 550px;
+        width: 100%;
+        border-radius: 60px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        padding: 60px 40px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        animation: fadeInUp 1.2s ease-out forwards;
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+      }
+
+      /* FIORI */
+      .floral-top-left {
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        width: 250px;
+        height: 250px;
+        background: url("fiori_sinistra.png") no-repeat;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate;
+      }
+      .floral-bottom-right {
+        position: absolute;
+        bottom: -2px;
+        right: -2px;
+        width: 250px;
+        height: 250px;
+        background: url("fiori_destra.png") no-repeat bottom right;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate-reverse;
+      }
+      .floral-top-right {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 200px;
+        height: 200px;
+        background: url("cornice_destra.png") no-repeat top right;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate;
+      }
+      .floral-bottom-left {
+        position: absolute;
+        bottom: -2px;
+        left: -2px;
+        width: 200px;
+        height: 200px;
+        background: url("cornice_sinistra.png") no-repeat bottom left;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate-reverse;
+      }
+
+      .title {
+        font-family: "Great Vibes", cursive;
+        font-size: 3rem;
+        color: var(--accent);
+        opacity: 0.8;
+        position: relative;
+        z-index: 10;
+      }
+
+      .title::after {
+        content: "✧";
+        display: block;
+        font-size: 1rem;
+        color: var(--accent);
+        margin-top: 5px;
+        font-size: 1.5rem;
+        color: var(--accent);
+        opacity: 0.6;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 21;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      /* TIMELINE STYLE */
+      .timeline {
+        position: relative;
+        max-width: 320px;
+        margin: 0 auto;
+        padding: 0;
+        list-style: none;
+        text-align: left;
+        z-index: 10;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 15px;
+        top: 5px;
+        bottom: 5px;
+        width: 1px;
+        background: var(--accent);
+        opacity: 0.6;
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-left: 45px;
+        margin-bottom: 25px;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      .timeline-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .timeline-dot {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: #fff;
+        border: 2px solid var(--accent);
+        z-index: 2;
+        animation: pulseDot 3s ease-in-out infinite;
+      }
+
+      .time {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.2rem;
+        color: #888;
+        font-weight: 600;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      .label {
+        font-family: "Great Vibes", cursive;
+        font-size: 1.8rem;
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      /* STILE ICONE DORATE AGGIORNATO: Ora usa immagini dettagliate */
+      .icon-box {
+        width: 45px; /* Dimensioni leggermente aumentate per mostrare i dettagli */
+        height: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .gold-icon {
+        max-width: 100%;
+        max-height: 100%;
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+        animation: iconFloat 4s ease-in-out infinite;
+      }
+
+      .foot {
+        font-family: "Great Vibes", cursive;
+        margin-top: 20px;
+        font-family: "Great Vibes", cursive;
+        font-size: 1.8rem;
+        color: var(--accent);
+        opacity: 0.8;
+      }
+
+      .foot::before {
+        content: "✧";
+        display: block;
+        font-size: 1rem;
+        color: var(--accent);
+        font-size: 1.5rem;
+        color: var(--accent);
+        opacity: 0.6;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 21;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Delays per l'animazione */
+      .delay-1 {
+        animation: fadeInUp 0.8s ease-out 0.3s both;
+      }
+      .delay-2 {
+        animation: fadeInUp 0.8s ease-out 0.6s both;
+      }
+      .delay-3 {
+        animation: fadeInUp 0.8s ease-out 0.9s both;
+      }
+      .delay-4 {
+        animation: fadeInUp 0.8s ease-out 1.2s both;
+      }
+      .delay-5 {
+        animation: fadeInUp 0.8s ease-out 1.5s both;
+      }
+      .delay-6 {
+        animation: fadeInUp 0.8s ease-out 1.8s both;
+      }
+      .delay-7 {
+        animation: fadeInUp 0.8s ease-out 2.1s both;
+      }
+      .delay-8 {
+        animation: fadeInUp 0.8s ease-out 2.3s both;
+      }
+      .delay-9 {
+        animation: fadeInUp 0.8s ease-out 2.5s both;
+      }
+
+      @keyframes pulseDot {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes iconFloat {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-3px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      .timeline-item:hover {
+        transform: translateY(-3px);
+        transition: transform 0.3s ease;
+      }
+
+      @media (max-width: 480px) {
+        .envelope {
+          padding: 50px 20px;
+          border-radius: 30px;
+        }
+        .title {
+          font-size: 2.5rem;
+        }
+        .foot {
+          font-size: 1.2rem;
+        }
+        .time {
+          font-size: 1.2rem;
+        }
+        .label {
+          font-size: 1.6rem;
+        }
+        .icon-box {
+          width: 35px;
+          height: 35px;
+        }
+        .floral-top-left,
+        .floral-bottom-right {
+          width: 180px;
+          height: 180px;
+        }
+        .floral-bottom-left,
+        .floral-top-right {
+          width: 150px;
+          height: 150px;
+        }
+      }
+
+      .bottom-nav {
+        position: fixed;
+        bottom: 20px;
+        transform: translateX(-50%);
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        display: flex;
+        gap: 15px;
+        padding: 12px 25px;
+        border-radius: 50px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(164, 134, 65, 0.2);
+        z-index: 1000;
+      }
+
+      .nav-item {
+        text-decoration: none;
+        color: #888;
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        color: var(--accent);
+      }
+
+      /* Nasconde il menu su schermi molto piccoli o fa aggiustamenti */
+      @media (max-width: 480px) {
+        .bottom-nav {
+          width: 90%;
+          justify-content: space-between;
+          padding: 12px 15px;
+          gap: 5px;
+        }
+        .nav-item {
+          font-size: 0.55rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="bgMusic" src="background.mpeg" loop autoplay></audio>
+
+    <div class="envelope">
+      <div class="floral-top-left" style="z-index: 0"></div>
+      <div class="floral-bottom-right" style="z-index: 0"></div>
+      <div class="floral-top-right" style="z-index: 0"></div>
+      <div class="floral-bottom-left" style="z-index: 0"></div>
+
+      <div class="title delay-1">Programma</div>
+
+      <ul class="timeline delay-2">
+        <li class="timeline-item delay-2">
+          <div class="timeline-dot"></div>
+          <div class="time">Ore 15:00 - 15:30</div>
+          <div class="label">
+            <div class="icon-box">
+              <img src="arrivoOspiti.png" alt="Arrivo" class="gold-icon" />
+            </div>
+            Arrivo ospiti
+          </div>
+        </li>
+
+        <li class="timeline-item delay-3">
+          <div class="timeline-dot"></div>
+          <!--  <div class="time">Ore 16:00</div> -->
+          <div class="label">
+            <div class="icon-box">
+              <img src="fedi.png" alt="Anelli" class="gold-icon" />
+            </div>
+            Cerimonia
+          </div>
+        </li>
+
+        <li class="timeline-item delay-4">
+          <div class="timeline-dot"></div>
+          <!-- <div class="time">Ore 17:30</div> -->
+          <div class="label">
+            <div class="icon-box">
+              <img src="aperitivo.png" alt="Aperitivo" class="gold-icon" />
+            </div>
+            Aperitivo & Foto
+          </div>
+        </li>
+
+        <li class="timeline-item delay-5">
+          <div class="timeline-dot"></div>
+          <!-- <div class="time">Ore 20:00</div> -->
+          <div class="label">
+            <div class="icon-box">
+              <img src="cena.png" alt="Cena" class="gold-icon" />
+            </div>
+            Cena
+          </div>
+        </li>
+
+        <li class="timeline-item delay-6">
+          <div class="timeline-dot"></div>
+          <!-- <div class="time">Ore 20:00</div> -->
+          <div class="label">
+            <div class="icon-box">
+              <img src="attivita.png" alt="Attivita" class="gold-icon" />
+            </div>
+            Attività
+          </div>
+        </li>
+
+        <li class="timeline-item delay-7">
+          <div class="timeline-dot"></div>
+          <!-- <div class="time">Ore 22:00</div> -->
+          <div class="label">
+            <div class="icon-box">
+              <img src="torta.png" alt="Torta" class="gold-icon" />
+            </div>
+            Torta
+          </div>
+        </li>
+
+        <li class="timeline-item delay-8">
+          <div class="timeline-dot"></div>
+          <!-- <div class="time">Ore 22:00</div> -->
+          <div class="label">
+            <div class="icon-box">
+              <img src="party.png" alt="Party" class="gold-icon" />
+            </div>
+            Party
+          </div>
+        </li>
+
+        <li class="timeline-item delay-9">
+          <div class="timeline-dot"></div>
+          <div class="time">Ore 24:00</div>
+          <div class="label">
+            <div class="icon-box">
+              <img src="fine.png" alt="Fine" class="gold-icon" />
+            </div>
+            Fine
+          </div>
+        </li>
+      </ul>
+
+      <div class="foot delay-7">Denise & Alessandro</div>
+    </div>
+    <nav class="bottom-nav delay-5">
+      <a href="busta.html" class="nav-item">Home</a>
+      <a href="schedule.html" class="nav-item active">Programma</a>
+      <a href="listaNozze.html" class="nav-item">Lista Nozze</a>
+      <a href="info.html" class="nav-item">Dress Code</a>
+    </nav>
+
+    <script>
+      const bgMusic = document.getElementById("bgMusic");
+      const FADE_DURATION = 100;
+
+      window.addEventListener("load", () => {
+        const savedTime = localStorage.getItem("musicTime");
+        if (savedTime) {
+          bgMusic.currentTime = parseFloat(savedTime);
+        }
+
+        // Start at volume 0 for the fade-in effect
+        bgMusic.volume = 0;
+
+        bgMusic
+          .play()
+          .then(() => {
+            fadeAudio(bgMusic, 1, FADE_DURATION); // Fade from 0 to 1
+          })
+          .catch(() => {
+            localStorage.setItem("musicTime", 0);
+            console.log(
+              "Autoplay blocked: User needs to click something first!",
+            );
+          });
+      });
+
+      document.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          // Only intercept internal links (don't break external ones)
+          if (link.hostname === window.location.hostname) {
+            e.preventDefault(); // Stop the page from changing immediately
+            const targetUrl = link.href;
+
+            fadeAudio(bgMusic, 0, FADE_DURATION, () => {
+              // Once volume is 0, save the time and navigate
+              localStorage.setItem("musicTime", bgMusic.currentTime);
+              window.location.href = targetUrl;
+            });
+          }
+        });
+      });
+
+      function fadeAudio(player, targetVolume, duration, callback) {
+        const startVolume = player.volume;
+        const startTime = performance.now();
+
+        function animateVolume(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+
+          // Linear interpolation between start and target volume
+          player.volume = Math.max(
+            0,
+            Math.min(1, startVolume + (targetVolume - startVolume) * progress),
+          );
+
+          if (progress < 1) {
+            requestAnimationFrame(animateVolume);
+          } else if (callback) {
+            callback();
+          }
+        }
+        requestAnimationFrame(animateVolume);
+      }
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          // The user exited the app or switched tabs
+          // We pause it so it doesn't run in the background
+          bgMusic.pause();
+          // Save the time immediately so we don't lose progress
+          sessionStorage.setItem("musicTime", bgMusic.currentTime);
+        } else {
+          // The user came back to the browser
+          const savedTime = sessionStorage.getItem("musicTime");
+          if (savedTime) {
+            bgMusic.currentTime = parseFloat(savedTime);
+          }
+          bgMusic
+            .play()
+            .catch(() => console.log("User interaction required to resume"));
+        }
+      });
+
+      // 2. Continually save the current time
+      bgMusic.ontimeupdate = () => {
+        localStorage.setItem("musicTime", bgMusic.currentTime);
+      };
+
+      document.body.addEventListener(
+        "click",
+        () => {
+          if (bgMusic.paused) {
+            bgMusic
+              .play()
+              .catch((error) => console.log("Audio play failed:", error));
+            fadeAudio(bgMusic, 1, FADE_DURATION);
+          }
+        },
+        { once: true },
+      );
+    </script>
+  </body>
+</html>

@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Save the date</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@200;300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Playfair+Display:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+      :root {
+        --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        --text-dark: #3e3e3e;
+        --accent: #a48641;
+        --gold-patina: #d4af37;
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg-gradient);
+        color: var(--text-dark);
+        font-family: "Montserrat", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        overflow-x: hidden;
+      }
+
+      /* Animazione d'ingresso base */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .envelope {
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.4)),
+          url("sfondo.png") no-repeat center;
+        background-size: cover;
+        max-width: 550px;
+        width: 100%;
+        border-radius: 60px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        padding: 60px 40px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        animation: fadeInUp 1.2s ease-out forwards;
+        mask-image: radial-gradient(white, black);
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+      }
+
+      /* Classi per il ritardo della comparsa */
+      .delay-1 {
+        animation: fadeInUp 0.8s ease-out 0.3s both;
+      }
+      .delay-2 {
+        animation: fadeInUp 0.8s ease-out 0.6s both;
+      }
+      .delay-3 {
+        animation: fadeInUp 0.8s ease-out 0.9s both;
+      }
+      .delay-4 {
+        animation: fadeInUp 0.8s ease-out 1.2s both;
+      }
+      .delay-5 {
+        animation: fadeInUp 0.8s ease-out 1.5s both;
+      }
+
+      @keyframes pulseSoft {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.07);
+        }
+      }
+
+      @keyframes floatCorner {
+        0% {
+          transform: translate(-2px, -2px) rotate(0deg);
+        }
+        100% {
+          transform: translate(5px, 5px) rotate(1deg);
+        }
+      }
+
+      /* FIORI */
+      .floral-top-left {
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        width: 250px;
+        height: 250px;
+        background: url("fiori_sinistra.png") no-repeat;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate;
+      }
+      .floral-bottom-right {
+        position: absolute;
+        bottom: -2px;
+        right: -2px;
+        width: 250px;
+        height: 250px;
+        background: url("fiori_destra.png") no-repeat bottom right;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate-reverse;
+      }
+      .floral-top-right {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 200px;
+        height: 200px;
+        background: url("cornice_destra.png") no-repeat top right;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate;
+      }
+      .floral-bottom-left {
+        position: absolute;
+        bottom: -2px;
+        left: -2px;
+        width: 200px;
+        height: 200px;
+        background: url("cornice_sinistra.png") no-repeat bottom left;
+        background-size: contain;
+        z-index: 20;
+        pointer-events: none;
+        animation: floatCorner 5s ease-in-out infinite alternate-reverse;
+      }
+
+      .floral-icon {
+        font-size: 1.5rem;
+        color: var(--accent);
+        opacity: 0.6;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 21;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      /* Foto nomi con doppia animazione: comparsa e poi pulsazione */
+      .main-photo-container {
+        animation: fadeInUp 0.5s ease-out 0.8s both;
+      }
+      .main-photo {
+        width: 350px;
+        height: 150px;
+        object-fit: cover;
+        position: relative;
+        z-index: 10;
+        margin-bottom: 10px;
+        animation: pulseSoft 4s ease-in-out infinite alternate;
+      }
+
+      .tagline {
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-size: 0.75rem;
+        margin-bottom: 5px;
+        font-weight: 300;
+        color: #888;
+      }
+      .intro-text {
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #888;
+        line-height: 1.6;
+      }
+
+      .scratch-container {
+        position: relative;
+        width: 280px;
+        height: 70px;
+        margin: 15px 0;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .glitter-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 21;
+      }
+
+      .star {
+        position: absolute;
+        background: white;
+        clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+        opacity: 0;
+        animation: sparkle var(--d) infinite;
+      }
+
+      @keyframes sparkle {
+        0%,
+        100% {
+          opacity: 0;
+          transform: scale(0);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .date-text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+        border: 1px solid rgba(164, 134, 65, 0.3);
+        border-radius: 12px;
+      }
+
+      #the-date {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--accent);
+        letter-spacing: 2px;
+      }
+      .location-subtext {
+        font-family: "Playfair Display", serif;
+        font-size: 0.95rem;
+        color: var(--accent);
+        font-style: italic;
+        margin-top: 5px;
+      }
+
+      #date-scratch {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        cursor: crosshair;
+        touch-action: none;
+        z-index: 20;
+      }
+
+      /* COUNTDOWN SEQUENZIALE */
+      .countdown-flex {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 15px 0;
+      }
+      .unit {
+        opacity: 0;
+        animation: fadeInUp 0.6s ease-out forwards;
+      }
+      .unit:nth-child(1) {
+        animation-delay: 1.2s;
+      }
+      .unit:nth-child(2) {
+        animation-delay: 1.4s;
+      }
+      .unit:nth-child(3) {
+        animation-delay: 1.6s;
+      }
+      .unit:nth-child(4) {
+        animation-delay: 1.8s;
+      }
+
+      .unit .val {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border: 1px solid rgba(164, 134, 65, 0.3);
+        border-radius: 12px;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        background: white;
+        margin-bottom: 5px;
+      }
+      .unit .lbl {
+        font-size: 0.45rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #888;
+        font-weight: 500;
+      }
+
+      /* PULSANTI SEQUENZIALI */
+      .actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        max-width: 280px;
+        margin: 10px auto 15px auto;
+      }
+      .btn {
+        opacity: 0;
+        animation: fadeInUp 0.6s ease-out forwards;
+        text-decoration: none;
+        color: var(--text-dark);
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+        padding: 12px;
+        border-radius: 50px;
+        transition: all 0.4s;
+        background: white;
+        border: 1px solid rgba(164, 134, 65, 0.3);
+        position: relative;
+        z-index: 30;
+      }
+      .btn:nth-child(1) {
+        animation-delay: 2.1s;
+      }
+      .btn:nth-child(2) {
+        animation-delay: 2.3s;
+      }
+      .btn:nth-child(3) {
+        animation-delay: 2.5s;
+      }
+      .btn:hover {
+        background: var(--accent);
+        color: white;
+        transform: scale(1.03);
+      }
+
+      .star {
+        position: absolute;
+        background: white;
+        clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+        opacity: 0;
+        animation: sparkle var(--d) infinite;
+      }
+      @keyframes sparkle {
+        0%,
+        100% {
+          opacity: 0;
+          transform: scale(0);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      #the-date {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--accent);
+        letter-spacing: 2px;
+      }
+      .location-subtext {
+        font-family: "Playfair Display", serif;
+        font-size: 0.95rem;
+        color: var(--accent);
+        font-style: italic;
+        margin-top: 5px;
+      }
+      #date-scratch {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        cursor: crosshair;
+        touch-action: none;
+        z-index: 20;
+      }
+
+      @media (max-width: 480px) {
+        .envelope {
+          padding: 50px 20px;
+          border-radius: 30px;
+        }
+        .floral-top-left,
+        .floral-bottom-right {
+          width: 180px;
+          height: 180px;
+        }
+        .floral-bottom-left,
+        .floral-top-right {
+          width: 150px;
+          height: 150px;
+        }
+        .main-photo {
+          width: 100%;
+          max-width: 280px;
+        }
+      }
+
+      .bottom-nav {
+        position: fixed;
+        bottom: 20px;
+        transform: translateX(-50%);
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        display: flex;
+        gap: 15px;
+        padding: 12px 25px;
+        border-radius: 50px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(164, 134, 65, 0.2);
+        z-index: 1000;
+      }
+
+      .nav-item {
+        text-decoration: none;
+        color: #888;
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        color: var(--accent);
+      }
+
+      /* Nasconde il menu su schermi molto piccoli o fa aggiustamenti */
+      @media (max-width: 480px) {
+        .bottom-nav {
+          width: 90%;
+          justify-content: space-between;
+          padding: 12px 15px;
+          gap: 5px;
+        }
+        .nav-item {
+          font-size: 0.55rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="bgMusic" src="background.mpeg" loop autoplay></audio>
+
+    <div class="envelope">
+      <div class="floral-top-left" style="z-index: 0"></div>
+      <div class="floral-bottom-right" style="z-index: 0"></div>
+      <div class="floral-top-right" style="z-index: 0"></div>
+      <div class="floral-bottom-left" style="z-index: 0"></div>
+
+      <div class="floral-icon delay-1">✧</div>
+      <div class="tagline delay-1">Save the Date</div>
+
+      <div class="main-photo-container">
+        <img
+          src="nomi.png"
+          class="main-photo"
+          alt="Denise & Alessandro"
+        />
+      </div>
+
+      <p class="intro-text delay-2">Scopri i dettagli del nostro matrimonio</p>
+
+      <div class="scratch-container delay-3" id="container">
+        <div class="date-text">
+          <div style="display: flex; align-items: center; gap: 8px">
+            <span style="color: var(--accent); font-size: 0.8rem">✧</span>
+            <span id="the-date">08 . 07 . 2027</span>
+            <span style="color: var(--accent); font-size: 0.8rem">✧</span>
+          </div>
+          <div class="location-subtext">Villa dei Mulini, Mantova</div>
+        </div>
+        <div class="glitter-overlay" id="glitter-box"></div>
+        <canvas id="date-scratch"></canvas>
+      </div>
+
+      <div class="countdown-flex delay-4">
+        <div class="unit">
+          <span class="val" id="d">00</span><span class="lbl">Giorni</span>
+        </div>
+        <div class="unit">
+          <span class="val" id="h">00</span><span class="lbl">Ore</span>
+        </div>
+        <div class="unit">
+          <span class="val" id="m">00</span><span class="lbl">Minuti</span>
+        </div>
+        <div class="unit">
+          <span class="val" id="s">00</span><span class="lbl">Secondi</span>
+        </div>
+      </div>
+
+      <div class="actions delay-5">
+        <a href="#" id="cal-link" class="btn">SALVA NEL CALENDARIO</a>
+        <a
+          href="https://maps.google.com/?q=Villa+dei+Mulini+Mantova"
+          id="map-link"
+          class="btn"
+          target="_blank"
+          >VEDI LA LOCATION</a
+        >
+        <a
+          href="https://www.matrimonio.com/web/denise-landini-and-alessandro-lambertini/confermapresenza-3"
+          id="conferma-link"
+          class="btn"
+          target="_blank"
+          >CONFERMA PRESENZA</a
+        >
+      </div>
+
+      <div class="floral-icon delay-5" style="animation-delay: 2s">✧</div>
+    </div>
+
+    <script>
+      const DATA = {
+        sposo: "Alessandro",
+        sposa: "Denise",
+        dataISO: "2027-07-08T16:00:00",
+        locationNome: "Villa dei Mulini, Mantova",
+        mappaLink: "https://maps.google.com/?q=Villa+dei+Mulini+Mantova",
+      };
+
+      const canvas = document.getElementById("date-scratch");
+      const ctx = canvas.getContext("2d");
+      const glitterBox = document.getElementById("glitter-box");
+      let scratchCount = 0;
+      let isRevealed = false;
+
+      function createGlitter() {
+        for (let i = 0; i < 15; i++) {
+          const star = document.createElement("div");
+          star.className = "star";
+          const size = Math.random() * 8 + 4 + "px";
+          star.style.width = size;
+          star.style.height = size;
+          star.style.top = Math.random() * 100 + "%";
+          star.style.left = Math.random() * 100 + "%";
+          star.style.setProperty("--d", Math.random() * 2 + 1 + "s");
+          star.style.animationDelay = Math.random() * 2 + "s";
+          glitterBox.appendChild(star);
+        }
+      }
+
+      function initScratch() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+
+        const grad = ctx.createLinearGradient(
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+        );
+        grad.addColorStop(0, "#D4AF37");
+        grad.addColorStop(0.5, "#F2D379");
+        grad.addColorStop(1, "#D4AF37");
+
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "600 16px 'Montserrat', sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("GRATTAMI", canvas.width / 2, canvas.height / 2 + 6);
+        createGlitter();
+      }
+
+      window.addEventListener("load", initScratch);
+
+      function getPointerPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        let clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        return { x: clientX - rect.left, y: clientY - rect.top };
+      }
+
+      function handleScratch(e) {
+        if (isRevealed) return;
+        const pos = getPointerPos(e);
+
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, 30, 0, Math.PI * 2);
+        ctx.fill();
+
+        scratchCount++;
+        if (scratchCount > 30) revealData();
+      }
+
+      function revealData() {
+        if (isRevealed) return;
+        isRevealed = true;
+        canvas.style.transition = "opacity 1s ease";
+        glitterBox.style.transition = "opacity 1s ease";
+        canvas.style.opacity = "0";
+        glitterBox.style.opacity = "0";
+        lanciaCoriandoli();
+        setTimeout(() => {
+          canvas.remove();
+          glitterBox.remove();
+        }, 1000);
+      }
+
+      canvas.addEventListener("mousemove", handleScratch);
+      canvas.addEventListener("mouseenter", handleScratch);
+
+      canvas.addEventListener(
+        "touchmove",
+        (e) => {
+          handleScratch(e);
+          e.preventDefault();
+        },
+        { passive: false },
+      );
+
+      function lanciaCoriandoli() {
+        var duration = 3000;
+        var end = Date.now() + duration;
+        (function frame() {
+          confetti({
+            particleCount: 3,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0, y: 0.8 },
+            colors: ["#D4AF37", "#ffffff", "#AA82C8"],
+          });
+          confetti({
+            particleCount: 3,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1, y: 0.8 },
+            colors: ["#D4AF37", "#ffffff", "#AA82C8"],
+          });
+          if (Date.now() < end) requestAnimationFrame(frame);
+        })();
+      }
+
+      function updateTimer() {
+        const target = new Date(DATA.dataISO).getTime();
+        const now = new Date().getTime();
+        const gap = target - now;
+        if (gap <= 0) return;
+        const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+        const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((gap % (1000 * 60)) / 1000);
+        document.getElementById("d").innerText = d.toString().padStart(2, "0");
+        document.getElementById("h").innerText = h.toString().padStart(2, "0");
+        document.getElementById("m").innerText = m.toString().padStart(2, "0");
+        document.getElementById("s").innerText = s.toString().padStart(2, "0");
+      }
+      setInterval(updateTimer, 1000);
+      updateTimer();
+
+      document.getElementById("map-link").href = DATA.mappaLink;
+      const calUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Matrimonio+${DATA.sposo}+e+${DATA.sposa}&dates=${DATA.dataISO.replace(/[-:]/g, "").split(".")[0]}Z/${DATA.dataISO.replace(/[-:]/g, "").split(".")[0]}Z&location=${encodeURIComponent(DATA.locationNome)}`;
+      document.getElementById("cal-link").href = calUrl;
+    </script>
+
+    <nav class="bottom-nav delay-5">
+      <a href="busta.html" class="nav-item active">Home</a>
+      <a href="schedule.html" class="nav-item">Programma</a>
+      <a href="listaNozze.html" class="nav-item">Lista Nozze</a>
+      <a href="info.html" class="nav-item">Dress Code</a>
+    </nav>
+
+    <script>
+      const bgMusic = document.getElementById("bgMusic");
+      const FADE_DURATION = 100;
+
+      window.addEventListener("load", () => {
+        const savedTime = localStorage.getItem("musicTime");
+        if (savedTime) {
+          bgMusic.currentTime = parseFloat(savedTime);
+        }
+
+        // Start at volume 0 for the fade-in effect
+        bgMusic.volume = 0;
+
+        bgMusic
+          .play()
+          .then(() => {
+            fadeAudio(bgMusic, 1, FADE_DURATION); // Fade from 0 to 1
+          })
+          .catch(() => {
+            localStorage.setItem("musicTime", 0);
+            console.log(
+              "Autoplay blocked: User needs to click something first!",
+            );
+          });
+      });
+
+      document.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          // Only intercept internal links (don't break external ones)
+          if (link.hostname === window.location.hostname) {
+            e.preventDefault(); // Stop the page from changing immediately
+            const targetUrl = link.href;
+
+            fadeAudio(bgMusic, 0, FADE_DURATION, () => {
+              // Once volume is 0, save the time and navigate
+              localStorage.setItem("musicTime", bgMusic.currentTime);
+              window.location.href = targetUrl;
+            });
+          }
+        });
+      });
+
+      function fadeAudio(player, targetVolume, duration, callback) {
+        const startVolume = player.volume;
+        const startTime = performance.now();
+
+        function animateVolume(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+
+          // Linear interpolation between start and target volume
+          player.volume = Math.max(
+            0,
+            Math.min(1, startVolume + (targetVolume - startVolume) * progress),
+          );
+
+          if (progress < 1) {
+            requestAnimationFrame(animateVolume);
+          } else if (callback) {
+            callback();
+          }
+        }
+        requestAnimationFrame(animateVolume);
+      }
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          // The user exited the app or switched tabs
+          // We pause it so it doesn't run in the background
+          bgMusic.pause();
+          // Save the time immediately so we don't lose progress
+          sessionStorage.setItem("musicTime", bgMusic.currentTime);
+        } else {
+          // The user came back to the browser
+          const savedTime = sessionStorage.getItem("musicTime");
+          if (savedTime) {
+            bgMusic.currentTime = parseFloat(savedTime);
+          }
+          bgMusic
+            .play()
+            .catch(() => console.log("User interaction required to resume"));
+        }
+      });
+
+      // 2. Continually save the current time
+      bgMusic.ontimeupdate = () => {
+        localStorage.setItem("musicTime", bgMusic.currentTime);
+      };
+
+      document.body.addEventListener(
+        "click",
+        () => {
+          if (bgMusic.paused) {
+            bgMusic
+              .play()
+              .catch((error) => console.log("Audio play failed:", error));
+            fadeAudio(bgMusic, 1, FADE_DURATION);
+          }
+        },
+        { once: true },
+      );
+    </script>
+  </body>
+</html>
